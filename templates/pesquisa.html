@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Pesquisa</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="search-container">
+        <h1>Pesquisa</h1>
+        <form class="search-form" method="GET">
+            {% csrf_token %}
+            {% comment %} {% render_field ... type="search" id="search" name="name" placeholder="Pesquisar..." class="search-input" %} {% endcomment %}
+            <button type="submit" class="search-button">Pesquisar</button>
+        </form>
+
+        <div class="product-list">
+            {% for product in object_list %}
+                <div class="product-card">
+                    <div class="product-info">
+                        <h3 class="product-name">{{ product.name }}</h3>
+                        <p class="product-price">R$ {{ product.price }}</p>
+                        <p class="product-price">{{ product.date }}</p>
+                        <p class="product-category">{{ product.category }}</p>
+                        <p class="product-available">{{ product.available|yesno:"Disponível,Indisponível" }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <p>Nenhum produto encontrado.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Links de paginação -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1{{ filter_url }}">Primeira</a>
+                    <a href="?page={{ page_obj.previous_page_number }}{{ filter_url }}">Anterior</a>
+                {% endif %}
+
+                <span class="current">
+                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{{ filter_url }}">Próxima</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}{{ filter_url }}">Última</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</body>
+</html>

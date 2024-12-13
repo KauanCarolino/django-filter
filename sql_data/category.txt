@@ -1,0 +1,8 @@
+INSERT INTO product_category (name) 
+VALUES 
+    ('Tecnologia'),
+    ('Saúde'),
+    ('Educação'),
+    ('Entretenimento'),
+    ('Esportes'),
+    ('Arte');
