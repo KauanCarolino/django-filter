@@ -1,11 +1,17 @@
 from django.core.paginator import Paginator
 from django.views.generic import ListView
-from .models import Product
+from django_filters.views import FilterView
 
-class ProductView(ListView):
+from .util import show_results_filter_set
+from .models import Product
+from .filters import ProductFilter
+
+
+class ProductView(FilterView):
     template_name = 'pesquisa.html'
     model = Product
     paginate_by = 10
+    filterset_class = ProductFilter
 
     def get_queryset(self, *args, **kwargs):
         return Product.objects.all()
@@ -21,4 +27,10 @@ class ProductView(ListView):
         page_obj = paginator.get_page(page)
         
         context['page_obj'] = page_obj
+
+        context['filter_url'] = ('&' + qr.urlencode() if len(qr) > 0 else '') 
+        context['show_results'] =-show_results_filter_set(qr)
+        context['filter'] = ProductFilter(
+            data=self.request.GET, queryset=self.get_queryset()
+        )
         return context

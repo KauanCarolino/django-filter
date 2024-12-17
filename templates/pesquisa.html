@@ -1,4 +1,4 @@
-{% load static %}
+{% load static widget_tweaks %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -12,7 +12,12 @@
         <h1>Pesquisa</h1>
         <form class="search-form" method="GET">
             {% csrf_token %}
-            {% comment %} {% render_field ... type="search" id="search" name="name" placeholder="Pesquisar..." class="search-input" %} {% endcomment %}
+            {% render_field filter.form.name type="search" id="name" name="name" placeholder="Pesquisar pelo nome..." class="search-input" %}
+            {% render_field filter.form.category id="category" name="category" placeholder="Selecione uma categoria..." class="search-input" %}
+            {% render_field filter.form.date type="date" id="date" name="date" placeholder="Selecione a data..." class="search-input" %}
+            {% render_field filter.form.price id="price" name="price" placeholder="Preço..." class="search-input" %}
+            {% render_field filter.form.available id="available" name="available" class="search-input" %}
+            
             <button type="submit" class="search-button">Pesquisar</button>
         </form>
 
@@ -32,7 +37,6 @@
             {% endfor %}
         </div>
 
-        <!-- Links de paginação -->
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
